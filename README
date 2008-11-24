@@ -1,0 +1,81 @@
+ViewFu
+======
+
+ViewFu is a Merb plugin that provides all the miscellaneous View tasks. It's a combination of the functionality of BrowserDetect, Headliner, Meta Tags - along with additional tweaks such as providing commonly used View Helpers Methods.
+
+Maintainer Info
+======
+
+Tyler Crocker
+NeoRails.com
+
+Looking for *the one* awesome rails developer to add to your project? I may be available to help out. Contact me at neorails@gmail.com. 
+
+
+ViewFu HTML Helpers
+=======
+ViewFu provides helpers for commonly used html elements
+
+br #=> <br />
+hr #=> <hr />
+anchor("posts") #=> <a name='posts'></a>
+clear #=> <div class="clear"></div>
+clear(:left) #=> <div class="clearleft"></div>
+clear_tag(:br) #=> <br class="clear" />
+lorem #=> Lorem ipsum dolor...
+
+
+ViewFu Helper Queries
+=======
+production? #=> returns true if Rails.env == "production"
+
+
+ViewFu Misc Helpers
+=======
+paging(@array) #=> display a will_paginate paging links (only if the array is a valid paging collection)
+paging(@array, :sabros) #=> wrap the paging links with a class "sabros"
+
+
+Haml Specific Helpers
+=======
+Haml allows you to pash a hash of attributes. ViewFu assists this by providing a simple "hidden" helper that allows you to conditionally hide page elements.
+
+%div{hidden} #=> <div style="display:none">
+%div.posts{hidden_if(@posts.empty?)} #=> hide the .posts div if the array is empty
+%p.empty{hidden_unless(@posts.empty?)} #=> hide the empty posts message if the array has elements
+
+Page Titles
+=======
+ViewFu allows you to easily set the current page title from anywhere on your views
+
+title
+Displays the current page title
+
+title(new_title)
+Sets the page title
+
+See lib/headliner/README for more details
+
+
+Meta Tags
+=======
+ViewFu allows you to set meta tags on your page header from anywhere. Just add a call to meta_tags somewhere in your page header.
+
+meta_tags
+output all the html meta tags currently on the page
+
+meta_keywords
+output the meta keywords tag
+
+meta_keywords(val)
+set the page meta keywords
+
+meta_description
+output the meta description tag
+
+meta_description(val)
+set the page meta description
+
+
+
+Copyright (c) 2008 NeoRails.com, released under the MIT license
