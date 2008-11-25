@@ -1,6 +1,52 @@
 module ViewFu
   module TagHelper
-
+    # Calls a Merb Partial with a block, 
+    # which you can catch content from
+    # 
+    # Usage Example:
+    # <%= partial_block :fieldset, :legend => "Login" do %>
+    #   .. inner partial content
+    # <% end =%>
+    # 
+    # Associated Partial (_fieldset.html.erb)
+    # <fieldset>
+    #   <legend><%= locals[:legend] %></legend>
+    #   <%= catch_content %>
+    # </fieldset>
+    def partial_block(template, options={}, &block)
+      throw_content(:for_layout, block_given? ? capture(&block) : "")
+      partial(template, options)
+    end
+    
+    # Allows Easy Nested Layouts in Merb
+    # 
+    # Usage Example:
+    # 
+    # Parent Layout: layout/application.html.erb
+    # -------
+    # <html>
+    #   <head>
+    #     <title>Title</title>
+    #   </head>
+    #   <body>
+    #     <%= catch_content %>
+    #   </body>
+    # </html>
+    #
+    # SubLayout: layout/alternate.html.erb
+    # --------
+    # <%= parent_layout "application" do %>
+    #   <div class="inner_layout">
+    #     <%= catch_content %>
+    #   </div>
+    # <% end =%>
+    #
+    # Now you can use the alternate layout in any of your views as normal 
+    # and it will reuse the wrapping html on application.html.erb
+    def parent_layout
+      render capture(&block), :layout => layout
+    end
+    
     # Writes a br tag
     def br
       "<br />"
