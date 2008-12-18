@@ -120,22 +120,6 @@ module ViewFu
       {:style => "display:none"}
     end
     
-    # Easily link to an image
-    def link_to_image(image_path, label, url, options={})
-      # setup vertical alignment
-      vert_align = options.delete(:vert)
-      if vert_align.nil?
-        vert_style = "vertical-align: middle"
-      elsif vert_align.blank?
-        vert_style = ""
-      else
-        vert_style = "vertical-align: #{vert_align.to_i}px"
-      end
-
-      link_to(image_tag(image_path, :class => "vert-middle", :style => "#{vert_style}"), url, options)+"&nbsp;"+
-      link_to(label, url, options)
-    end
-    
     def add_class_if(css_class, condition)
       if condition
         {:class => css_class}

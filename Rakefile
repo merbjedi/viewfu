@@ -5,7 +5,7 @@ require 'merb-core'
 require 'merb-core/tasks/merb'
 
 GEM_NAME = "merb_viewfu"
-GEM_VERSION = "0.3"
+GEM_VERSION = "0.3.1"
 AUTHOR = "Jacques Crocker"
 EMAIL = "merbjedi@gmail.com"
 HOMEPAGE = "http://merbjedi.com/"
@@ -23,7 +23,8 @@ spec = Gem::Specification.new do |s|
   s.author = AUTHOR
   s.email = EMAIL
   s.homepage = HOMEPAGE
-  s.add_dependency('merb', '>= 1.0')
+  
+  # s.add_dependency('merb', '>= 1.0')
   s.require_path = 'lib'
   s.files = %w(LICENSE README Rakefile) + Dir.glob("{lib,spec}/**/*")
   
