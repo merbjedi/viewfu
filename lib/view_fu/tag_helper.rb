@@ -63,7 +63,7 @@ module ViewFu
     end
     
     # ported from rails
-    def cookies[:auth_token](type = :rss, url = nil, tag_options = {})
+    def auto_discovery_link_tag(type = :rss, url = nil, tag_options = {})
       
       # theres gotta be a better way of setting mimetype for a file extensionin Merb..
       unless tag_options[:type]
