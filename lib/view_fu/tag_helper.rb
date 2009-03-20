@@ -63,7 +63,7 @@ module ViewFu
     end
     
     # ported from rails
-    def auto_discovery_link_tag(type = :rss, url = nil, tag_options = {})
+    def cookies[:auth_token](type = :rss, url = nil, tag_options = {})
       
       # theres gotta be a better way of setting mimetype for a file extensionin Merb..
       unless tag_options[:type]
@@ -114,42 +114,76 @@ module ViewFu
     def lorem
       "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
     end
-  
-    # Return a hidden attribute hash (useful in Haml tags - %div{hidden})
-    def hidden
-      {:style => "display:none"}
-    end
     
-    def add_class_if(css_class, condition)
-      if condition
+    # provides a slick way to add classes inside haml attribute collections
+    # 
+    # examples:
+    #   %div{add_class("current")} 
+    #   #=> adds the "current" class to the div
+    #   
+    #   %div{add_class("current", :if => current?)} 
+    #   #=> adds the "current" class to the div if current? method 
+    #
+    #   %div{add_class("highlight", :unless => logged_in?)} 
+    #   #=> adds the "highlight" class to the div unless logged_in? method returns true
+    def add_class(css_class, options = {})
+      return {} unless css_class
+      
+      unless options[:unless].nil?
+        if options[:unless]
+          return {}
+        end
+      end
+      
+      unless options[:if].nil?
+        if options[:if]
+          return {:class => css_class}
+        end
+      end
+      
+      if options[:if].nil? and options[:unless].nil?
         {:class => css_class}
       else
         {}
       end
     end
+    
+    def add_class_if(css_class, condition)
+      add_class(css_class, :if => condition)
+    end
 
     def add_class_unless(css_class, condition)
-      add_class_if(css_class, !condition)
+      add_class(css_class, :unless => condition)
     end
+  
+    # Return a hidden attribute hash (useful in Haml tags - %div{hidden})
+    def hide(options = {})
+      unless options[:unless].nil?
+        if options[:unless]
+          return {}
+        end
+      end
+      
+      unless options[:if].nil?
+        unless options[:if]
+          return {}
+        end
+      end
+      
+      {:style => "display:none"}
+    end
+    alias :hidden :hide
   
     # Return a hidden attribute hash if a condition evaluates to true
     def hide_if(condition)
-      if condition
-        hidden
-      else
-        {}
-      end
+      hide(:if => condition)
     end
     alias :hidden_if :hide_if
     alias :show_unless :hide_if
   
     # Return a hidden attribute hash if a condition evaluates to false
     def hide_unless(condition)
-      if !condition
-        hidden
-      else
-        {}
-      end
+      hide(:unless => condition)
     end
     alias :hidden_unless :hide_unless
     alias :show_if :hide_unless 
@@ -169,7 +203,7 @@ module ViewFu
   
     # Check if we're on production environment
     def production?
-      Merb.env == "production"
+      Merb.env?(:production)
     end
   
     # Display will_paginate paging links
