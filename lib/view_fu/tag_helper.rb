@@ -43,7 +43,7 @@ module ViewFu
     #
     # Now you can use the alternate layout in any of your views as normal 
     # and it will reuse the wrapping html on application.html.erb
-    def parent_layout(layout)
+    def parent_layout(layout, &block)
       render capture(&block), :layout => layout
     end
     
