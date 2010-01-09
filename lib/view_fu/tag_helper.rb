@@ -43,7 +43,7 @@ module ViewFu
     #
     # Now you can use the alternate layout in any of your views as normal 
     # and it will reuse the wrapping html on application.html.erb
-    def parent_layout
+    def parent_layout(layout)
       render capture(&block), :layout => layout
     end
     
@@ -129,19 +129,15 @@ module ViewFu
     def add_class(css_class, options = {})
       return {} unless css_class
       
-      unless options[:unless].nil?
-        if options[:unless]
-          return {}
-        end
+      if options.has_key?(:unless) && options[:unless]
+        return {}
       end
       
-      unless options[:if].nil?
-        if options[:if]
-          return {:class => css_class}
-        end
+      if options.has_key?(:if) && options[:if]
+        return {:class => css_class}
       end
       
-      if options[:if].nil? and options[:unless].nil?
+      if !options.has_key?(:if) and !options.has_key?(:unless)
         {:class => css_class}
       else
         {}
@@ -158,16 +154,12 @@ module ViewFu
   
     # Return a hidden attribute hash (useful in Haml tags - %div{hidden})
     def hide(options = {})
-      unless options[:unless].nil?
-        if options[:unless]
-          return {}
-        end
+      if options.has_key?(:unless) && options[:unless]
+        return {}
       end
       
-      unless options[:if].nil?
-        unless options[:if]
-          return {}
-        end
+      if options.has_key?(:if) && !options[:if]
+        return {}
       end
       
       {:style => "display:none"}
